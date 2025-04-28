@@ -3,6 +3,7 @@ package org.example;
 import java.util.Scanner;
 
 public class Main {
+    static String[][] matrizMetas=new String[5][5];
     private static final Scanner scanner= new Scanner(System.in);
     public static void main(String[] args) {
         System.out.println("Bienvenido al sistema de control de gastos estudiantiles");
@@ -22,6 +23,7 @@ public class Main {
             System.out.println("Búsqueda por categoria");
             System.out.println("Calcular promedio");
             System.out.println("Establecer meta");
+            System.out.println("Revisar meta");
             System.out.println("Salir");
         } while (opcion!=0);
     }
@@ -41,6 +43,23 @@ public class Main {
             double total=Double.parseDouble(matriz[i][0]);
             double resultado=total/i;
             System.out.println("El promedio sería de"+resultado);
+        }
+    }
+
+    private static void meta() {
+        System.out.print("Qué monto meta desea proponer ");
+        String montoMeta = scanner.nextLine();
+        System.out.println("Para que mes desea mantener ese monto? ");
+        String mes = scanner.nextLine();
+        matrizMetas[0][0]=mes;
+        matrizMetas[0][1]=montoMeta;
+    }
+
+    private static void visualizarMetas(String[][] matrizMetas) {
+        for (int i=0; i< matrizMetas.length; i++) {
+            for (int j=0; j< matrizMetas[i].length; j++) {
+                System.out.println(matrizMetas[i][j]);
+            }
         }
     }
 }
