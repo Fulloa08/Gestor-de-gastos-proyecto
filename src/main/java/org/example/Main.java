@@ -1,7 +1,7 @@
 package org.example;
 
 import java.util.Scanner;
-
+// Para la clase main es INDISPENSABLE que la matriz base sea string
 public class Main {
     static String[][] matrizMetas=new String[5][5];
     private static final Scanner scanner= new Scanner(System.in);
