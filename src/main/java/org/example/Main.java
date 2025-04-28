@@ -9,28 +9,42 @@ public class Main {
         System.out.println("Bienvenido al sistema de control de gastos estudiantiles");
         System.out.println("Igrese el nombre de usuario");
         String nombre= scanner.nextLine();
+        if (nombre.trim().isEmpty()) {
+            System.out.println("Error: proporcione usuario");
+        }
         menu();
     }
 
     public static void menu() {
         int opcion;
         do {
-            opcion=scanner.nextInt();
-            System.out.println("Menu Principal");
-            System.out.println("Registrar gastos");
-            System.out.println("Historial");
-            System.out.println("Calcular Total");
-            System.out.println("Búsqueda por categoria");
-            System.out.println("Calcular promedio");
-            System.out.println("Establecer meta");
-            System.out.println("Revisar meta");
-            System.out.println("Salir");
-        } while (opcion!=0);
+            if (scanner.hasNextInt()) {
+                opcion = scanner.nextInt();
+            } else {
+                System.out.println("Error. debe introducir un numero ");
+                scanner.next();
+                opcion = -1;
+            }
+            mostrarOpciones();
+            ejecutar(opcion);
+        } while (opcion != 0);
+    }
+
+    private static void mostrarOpciones() {
+        System.out.println("Menu Principal");
+        System.out.println("Registrar gastos");
+        System.out.println("Historial");
+        System.out.println("Calcular Total");
+        System.out.println("Búsqueda por categoria");
+        System.out.println("Calcular promedio");
+        System.out.println("Establecer meta");
+        System.out.println("Revisar meta");
+        System.out.println("Salir");
     }
 
     private static void total(double[][] matriz) {
+        int suma=0;
         for(int i=0; i<=matriz.length; i++) {
-            int suma=0;
             int numero=Double.parseDouble(matriz[i][0]);
             suma+=numero;
             System.out.println("El total es de "+ suma);
@@ -56,7 +70,7 @@ public class Main {
     }
 
     private static void visualizarMetas(String[][] matrizMetas) {
-        for (int i=0; i< matrizMetas.length; i++) {
+        for (int i=0; i<= matrizMetas.length; i++) {
             for (int j=0; j< matrizMetas[i].length; j++) {
                 System.out.println(matrizMetas[i][j]);
             }
