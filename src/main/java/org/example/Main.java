@@ -12,6 +12,7 @@ public class Main{
             {500.0, "Entretenimiento", "2023-04-12", "Entrada al cine"},
             {300.0, "Educación", "2023-04-12", "Compra de libros"}
     };
+    mostrarTarjeta("Banco Estado", 25000);
 
 
     busquedaPorFecha(matriz, "2023-04-10");
@@ -54,6 +55,29 @@ public class Main{
                         ", Fecha: " + fila[2] + ", Detalle: " + fila[3]);
             }
         }
+    }
+    public static void busquedaPorCategoriaGasto(Object[][] matriz, String gastoBuscado){
+        for (Object[] fila : matriz){
+            if (fila[2].equals(gastoBuscado)){
+                System.out.println("");
+            }
+        }
+    }
+    public static void limpiarMatriz(String[][] matriz) {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                matriz[i][j] = null;
+            }
+        }
+    }
+    public static void mostrarTarjeta(String nombre, double saldo) {
+        System.out.println("****************************");
+        System.out.println("*        TARJETA           *");
+        System.out.println("*                          *");
+        System.out.println("*  Nombre: " + nombre);
+        System.out.printf ("*  Saldo: $%.2f          *\n", saldo);
+        System.out.println("*                          *");
+        System.out.println("****************************");
     }
 }
 
