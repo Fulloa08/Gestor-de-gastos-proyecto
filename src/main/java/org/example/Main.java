@@ -26,7 +26,6 @@ public class Main {
                 opcion = -1;
             }
             mostrarOpciones();
-            ejecutar(opcion);
         } while (opcion != 0);
     }
 
@@ -42,22 +41,25 @@ public class Main {
         System.out.println("Salir");
     }
 
-    private static void total(double[][] matriz) {
-        int suma=0;
-        for(int i=0; i<=matriz.length; i++) {
-            int numero=Double.parseDouble(matriz[i][0]);
-            suma+=numero;
+    static double total(String[][] matriz) {
+        double suma=0;
+        for(int i=0; i<matriz.length; i++) {
+            double numero=Double.parseDouble(matriz[i][0]);
+            suma+= numero;
             System.out.println("El total es de "+ suma);
             // Esta funcion toma la matriz donde se guardan los datos recorre la primeca columna cambia cada dato a double y los suma
-        }
+        } return(suma);
     }
 
-    private static void promedio(double[][] matriz) {
-        for(int i=0; i<= matriz.length; i++) {
-            double total=Double.parseDouble(matriz[i][0]);
-            double resultado=total/i;
-            System.out.println("El promedio sería de"+resultado);
+    static double promedio(String[][] matriz) {
+        double suma = 0;
+        for (int i = 0; i < matriz.length; i++) {
+            double total = Double.parseDouble(matriz[i][0]);
+            suma+=total;
         }
+            double resultado = suma / matriz.length;
+            System.out.println("El promedio sería de" + resultado);
+            return (resultado);
     }
 
     private static void meta() {
@@ -71,7 +73,7 @@ public class Main {
 
     private static void visualizarMetas(String[][] matrizMetas) {
         for (int i=0; i<= matrizMetas.length; i++) {
-            for (int j=0; j< matrizMetas[i].length; j++) {
+            for (int j=0; j<= matrizMetas[i].length; j++) {
                 System.out.println(matrizMetas[i][j]);
             }
         }
