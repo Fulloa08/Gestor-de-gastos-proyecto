@@ -29,6 +29,7 @@ public class Main{
         System.out.println("============================= " );
         System.out.println("    [1] Agregar Gasto       " );
         System.out.println("    [2] Mostrar Gastos      " );
+        System.out.println("    [3] Porcentaje por Categoría" );
         System.out.println("============================= " );
         System.out.print("      Opcion: ");
     }
@@ -41,6 +42,7 @@ public class Main{
         switch (opcion) {
             case 1 -> agregarGasto();
             case 2 -> mostrasGastos();
+            case 3 -> mostrarPorcentajePorCategoria();
             default -> System.out.println(" Opcion invalida...");
         }
     }
@@ -82,6 +84,26 @@ public class Main{
         }
         System.out.println();
         return;
+    }
+    public static void mostrarPorcentajePorCategoria() {
+        if (cantidadGastos == 0) {
+            System.out.println("No hay gastos registrados para calcular porcentajes.");
+            return;
+        }
+
+        java.util.HashMap<String, Integer> contadorCategorias = new java.util.HashMap<>();
+
+        for (int i = 0; i < cantidadGastos; i++) {
+            String categoria = gasto[i][2];
+            contadorCategorias.put(categoria, contadorCategorias.getOrDefault(categoria, 0) + 1);
+        }
+
+        System.out.println("\n=== Porcentaje de Gastos por Categoría ===");
+        for (String categoria : contadorCategorias.keySet()) {
+            int cantidad = contadorCategorias.get(categoria);
+            double porcentaje = (cantidad * 100.0) / cantidadGastos;
+            System.out.printf("Categoría: %s -> %.2f%% (%d gastos)%n", categoria, porcentaje, cantidad);
+        }
     }
 
 }
