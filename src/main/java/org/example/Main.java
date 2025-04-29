@@ -22,7 +22,7 @@ public class Main {
 
     public static boolean validacionUsuario() {
         String[][] usuarios = {
-                {"felipe", "1234"}
+                {"Juan", "1234"}
         };
 
         System.out.print("Ingrese nombre de usuario: ");
@@ -273,7 +273,7 @@ public class Main {
     public static void mostrarTarjeta() {
         System.out.println("\n╔════════════════════════════╗");
         System.out.println("║        TARJETA BANCARIA    ║");
-        System.out.println("║  Nombre: Felipe Ulloa      ║");
+        System.out.println("║  Nombre: Juan      ║");
         System.out.printf ("║  Saldo disponible: $%.2f   ║%n", saldoActual);
         System.out.println("║  Banco: Banco de Chile     ║");
         System.out.println("╚════════════════════════════╝");
