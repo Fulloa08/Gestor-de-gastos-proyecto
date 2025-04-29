@@ -1,174 +1,211 @@
 package org.example;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
-    static String[][] matrizMetas = new String[5][5];
-    static Object[][] matrizGastos = {
-            {1000.0, "Comida", "2023-04-10", "Almuerzo en restaurante"},
-            {200.0, "Transporte", "2023-04-10", "Taxi al trabajo"},
-            {150.0, "Comida", "2023-04-11", "Cena ligera"},
-            {500.0, "Entretenimiento", "2023-04-12", "Entrada al cine"},
-            {300.0, "Educación", "2023-04-12", "Compra de libros"}
-    };
-    private static final Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
+    public static final int TOTALGASTOS = 100;
+    public static int cantidadGastos = 0;
+    public static String[][] gasto = new String[TOTALGASTOS][4];
+
+    // Variables para meta de ahorro
+    public static double meta = 0;
+    public static double saldoActual = 0;
 
     public static void main(String[] args) {
-        System.out.println("Bienvenido al sistema de control de gastos estudiantiles");
-        validacionUsuario();
-        menu();
+        if (validacionUsuario()) {
+            menu();
+        } else {
+            System.out.println("Acceso denegado.");
+        }
     }
 
-    public static void validacionUsuario() {
+    public static boolean validacionUsuario() {
         String[][] usuarios = {
-                {"felipe", "1234"},
+                {"felipe", "1234"}
         };
 
         System.out.print("Ingrese nombre de usuario: ");
         String usuarioIngresado = scanner.nextLine();
+
         System.out.print("Ingrese contraseña: ");
         String contrasenaIngresada = scanner.nextLine();
 
-        boolean accesoConcedido = false;
-
         for (String[] usuario : usuarios) {
             if (usuario[0].equals(usuarioIngresado) && usuario[1].equals(contrasenaIngresada)) {
-                accesoConcedido = true;
-                break;
+                System.out.println("Acceso permitido.");
+                return true;
             }
         }
-
-
-        if (accesoConcedido) {
-            System.out.println("Acceso permitido.");
-        } else {
-            System.out.println("Acceso denegado.");
-            System.exit(0);
-        }
+        return false;
     }
 
     public static void menu() {
         int opcion;
         do {
             mostrarOpciones();
-            if (scanner.hasNextInt()) {
-                opcion = scanner.nextInt();
-                scanner.nextLine(); // Limpia buffer
-            } else {
-                System.out.println("Error. Debe introducir un número.");
-                scanner.next(); // Limpiar input inválido
-                opcion = -1;
-                continue;
-            }
-
-            switch (opcion) {
-                case 1:
-                    busquedaPorFecha(matrizGastos, "2023-04-10");
-                    break;
-                case 2:
-                    busquedaPorCategoriaGasto(matrizGastos, "Comida");
-                    break;
-                case 3:
-                    calcularTotal();
-                    break;
-                case 4:
-                    calcularPromedio();
-                    break;
-                case 5:
-                    establecerMeta();
-                    break;
-                case 6:
-                    visualizarMetas(matrizMetas);
-                    break;
-                case 7:
-                    mostrarTarjeta("Banco Estado", 25000);
-                    break;
-                case 0:
-                    System.out.println("Saliendo del sistema...");
-                    break;
-                default:
-                    System.out.println("Opción inválida.");
-            }
+            opcion = obtenerOpcion();
+            ejecutarOpcion(opcion);
         } while (opcion != 0);
     }
 
     private static void mostrarOpciones() {
-        System.out.println("\n--- Menú Principal ---");
-        System.out.println("1. Buscar gastos por fecha");
-        System.out.println("2. Buscar por categoría de gasto");
-        System.out.println("3. Calcular Total de gastos");
-        System.out.println("4. Calcular Promedio de gastos");
-        System.out.println("5. Establecer meta");
-        System.out.println("6. Revisar metas");
-        System.out.println("7. Mostrar tarjeta");
-        System.out.println("0. Salir");
-        System.out.print("Seleccione una opción: ");
+        System.out.println("\n=============================");
+        System.out.println("      Gestión de Gastos      ");
+        System.out.println("=============================");
+        System.out.println("[1] Agregar Gasto");
+        System.out.println("[2] Mostrar Gastos");
+        System.out.println("[3] Porcentaje por Categoría");
+        System.out.println("[4] Buscar por Fecha");
+        System.out.println("[5] Mostrar Tarjeta Bancaria");
+        System.out.println("[6] Establecer Meta de Ahorro");
+        System.out.println("[7] Verificar Meta de Ahorro");
+        System.out.println("[0] Salir");
+        System.out.println("=============================");
+        System.out.print("Opción: ");
     }
 
-    public static void busquedaPorFecha(Object[][] matriz, String fechaBuscada) {
-        for (Object[] fila : matriz) {
-            if (fila[2].equals(fechaBuscada)) {
-                System.out.println("Monto: " + fila[0] + ", Tipo de gasto: " + fila[1] +
-                        ", Fecha: " + fila[2] + ", Detalle: " + fila[3]);
+    private static int obtenerOpcion() {
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Debe ingresar un número.");
+            return -1;
+        }
+    }
+
+    private static void ejecutarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> agregarGasto();
+            case 2 -> mostrarGastos();
+            case 3 -> mostrarPorcentajePorCategoria();
+            case 4 -> buscarPorFecha();
+            case 5 -> mostrarTarjeta();
+            case 6 -> establecerMeta();
+            case 7 -> verificarMeta();
+            case 0 -> System.out.println("Saliendo...");
+            default -> System.out.println("Opción inválida.");
+        }
+    }
+
+    public static void agregarGasto() {
+        if (cantidadGastos >= TOTALGASTOS) {
+            System.out.println("Límite de gastos alcanzado.");
+            return;
+        }
+
+        System.out.println("=== Registrar un nuevo gasto ===");
+
+        System.out.print("Ingrese el monto: ");
+        String montoStr = scanner.nextLine();
+        double monto = Double.parseDouble(montoStr);
+
+        System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
+        String fecha = scanner.nextLine();
+
+        System.out.print("Ingrese la categoría: ");
+        String categoria = scanner.nextLine();
+
+        System.out.print("Ingrese información adicional: ");
+        String infoAdicional = scanner.nextLine();
+
+        gasto[cantidadGastos][0] = montoStr;
+        gasto[cantidadGastos][1] = fecha;
+        gasto[cantidadGastos][2] = categoria;
+        gasto[cantidadGastos][3] = infoAdicional;
+        cantidadGastos++;
+
+        saldoActual -= monto;
+
+        System.out.println("Gasto registrado exitosamente.");
+    }
+
+    public static void mostrarGastos() {
+        if (cantidadGastos == 0) {
+            System.out.println("No has realizado ningún gasto.");
+            return;
+        }
+
+        System.out.println("\n=== Gastos Registrados ===");
+        for (int i = 0; i < cantidadGastos; i++) {
+            System.out.printf("MONTO: %s, FECHA: %s, CATEGORÍA: %s, INFORMACIÓN: %s%n",
+                    gasto[i][0], gasto[i][1], gasto[i][2], gasto[i][3]);
+        }
+    }
+
+    public static void mostrarPorcentajePorCategoria() {
+        if (cantidadGastos == 0) {
+            System.out.println("No hay gastos registrados para calcular porcentajes.");
+            return;
+        }
+
+        HashMap<String, Integer> contadorCategorias = new HashMap<>();
+
+        for (int i = 0; i < cantidadGastos; i++) {
+            String categoria = gasto[i][2];
+            contadorCategorias.put(categoria, contadorCategorias.getOrDefault(categoria, 0) + 1);
+        }
+
+        System.out.println("\n=== Porcentaje de Gastos por Categoría ===");
+        for (String categoria : contadorCategorias.keySet()) {
+            int cantidad = contadorCategorias.get(categoria);
+            double porcentaje = (cantidad * 100.0) / cantidadGastos;
+            System.out.printf("Categoría: %s -> %.2f%% (%d gastos)%n", categoria, porcentaje, cantidad);
+        }
+    }
+
+    public static void buscarPorFecha() {
+        System.out.print("Ingrese la fecha a buscar (YYYY-MM-DD): ");
+        String fechaBuscada = scanner.nextLine();
+
+        boolean encontrado = false;
+        for (int i = 0; i < cantidadGastos; i++) {
+            if (gasto[i][1].equals(fechaBuscada)) {
+                System.out.printf("MONTO: %s, CATEGORÍA: %s, INFORMACIÓN: %s%n",
+                        gasto[i][0], gasto[i][2], gasto[i][3]);
+                encontrado = true;
             }
         }
-    }
 
-    public static void busquedaPorCategoriaGasto(Object[][] matriz, String categoria) {
-        for (Object[] fila : matriz) {
-            if (fila[1].equals(categoria)) {
-                System.out.println("Monto: " + fila[0] + ", Tipo de gasto: " + fila[1] +
-                        ", Fecha: " + fila[2] + ", Detalle: " + fila[3]);
-            }
+        if (!encontrado) {
+            System.out.println("No se encontraron gastos para esa fecha.");
         }
     }
 
-    public static void calcularTotal() {
-        double suma = 0;
-        for (Object[] fila : matrizGastos) {
-            suma += (Double) fila[0];
-        }
-        System.out.println("El total es: $" + suma);
+    public static void mostrarTarjeta() {
+        System.out.println("\n╔════════════════════════════╗");
+        System.out.println("║        TARJETA BANCARIA    ║");
+        System.out.println("║  Nombre: Felipe Ulloa      ║");
+        System.out.printf ("║  Saldo disponible: $%.2f   ║%n", saldoActual);
+        System.out.println("║  Banco: Banco de Chile     ║");
+        System.out.println("╚════════════════════════════╝");
     }
 
-    public static void calcularPromedio() {
-        double suma = 0;
-        for (Object[] fila : matrizGastos) {
-            suma += (Double) fila[0];
-        }
-        double promedio = suma / matrizGastos.length;
-        System.out.println("El promedio es: $" + promedio);
-    }
-
-    private static void establecerMeta() {
-        System.out.print("¿Qué monto meta desea proponer? ");
-        String montoMeta = scanner.nextLine();
-        System.out.print("¿Para qué mes desea mantener ese monto? ");
-        String mes = scanner.nextLine();
-        matrizMetas[0][0] = mes;
-        matrizMetas[0][1] = montoMeta;
-        System.out.println("Meta establecida correctamente.");
-    }
-
-    private static void visualizarMetas(String[][] matriz) {
-        System.out.println("\n--- Metas Registradas ---");
-        for (int i = 0; i < matriz.length; i++) {
-            if (matriz[i][0] != null && matriz[i][1] != null) {
-                System.out.println("Mes: " + matriz[i][0] + " | Monto Meta: " + matriz[i][1]);
-            }
+    public static void establecerMeta() {
+        System.out.print("Ingrese su meta de ahorro: $");
+        try {
+            meta = Double.parseDouble(scanner.nextLine());
+            System.out.print("Ingrese su saldo actual: $");
+            saldoActual = Double.parseDouble(scanner.nextLine());
+            System.out.println("Meta de ahorro configurada correctamente.");
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Debe ingresar un número válido.");
         }
     }
 
-    public static void mostrarTarjeta(String nombre, double saldo) {
-        System.out.println("****************************");
-        System.out.println("*        TARJETA           *");
-        System.out.println("*                          *");
-        System.out.println("*  Nombre: " + nombre);
-        System.out.printf("*  Saldo: $%.2f         *\n", saldo);
-        System.out.println("*                          *");
-        System.out.println("****************************");
+    public static void verificarMeta() {
+        if (meta == 0) {
+            System.out.println("Primero debes establecer una meta.");
+            return;
+        }
+
+        System.out.printf("Meta: $%.2f | Saldo actual: $%.2f%n", meta, saldoActual);
+        if (saldoActual >= meta) {
+            System.out.println("¡Felicidades! Has alcanzado tu meta de ahorro. 🎉");
+        } else {
+            double faltante = meta - saldoActual;
+            System.out.printf("Aún te faltan $%.2f para alcanzar tu meta.%n", faltante);
+        }
     }
 }
-
-
-
