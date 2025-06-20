@@ -1,4 +1,5 @@
 package Modelo;
+import Modelo.*;
 
 import java.util.*;
 
