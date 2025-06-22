@@ -34,7 +34,12 @@ public class GestorDatos {
             String detalle = scanner.nextLine();
             Gasto gasto = new Gasto(fecha, categoria, monto, detalle);
             crearRegistroGasto(fecha, categoria, monto, detalle);
+            regresarGasto(gasto);
         }
+    }
+
+    private Gasto regresarGasto(Gasto gasto){
+        return gasto;
     }
 
     private void crearRegistroGasto(String fecha, String categoria, double monto, String detalle) {

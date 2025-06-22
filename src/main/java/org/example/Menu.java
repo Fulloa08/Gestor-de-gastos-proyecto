@@ -5,6 +5,9 @@ import java.util.Scanner;
 public class Menu {
     Scanner scanner=new Scanner(System.in);
     GestorDatos gestor;
+    GestorAhorro ahorro;
+    GestorBuscador buscador;
+    GestorAnalisisFinanciero financias;
 
     public void main(String[] args) {
         mostrarMenu();
@@ -104,9 +107,9 @@ public class Menu {
         int eleccion= scanner.nextInt();
         switch (eleccion){
             case 1:
-                System.out.println("En construccion...");
+                Ahorro.crearAhorro();
             case 2:
-                System.out.println("En construccion...");
+                Ahorro.verHistorial();
             case 3:
                 break;
             default:
@@ -118,9 +121,9 @@ public class Menu {
         int eleccion= scanner.nextInt();
         switch (eleccion){
             case 1:
-                System.out.println("En construccion...");
+                buscador.buscarFecha();
             case 2:
-                System.out.println("En construccion...");
+                buscador.buscarCategoria();
             case 3:
                 break;
             default:
@@ -132,9 +135,9 @@ public class Menu {
         int eleccion= scanner.nextInt();
         switch (eleccion){
             case 1:
-                System.out.println("En construccion...");
+                financias.promedio();
             case 2:
-                System.out.println("En construccion...");
+                financias.porcentaje();
             case 3:
                 break;
             default:
