@@ -1,150 +1,147 @@
+// Archivo: Vista/Menu.java
 package Vista;
 
-import Controlador.GestorAhorro;
-import Controlador.GestorAnalisisFinanciero;
-import Controlador.GestorBuscador;
-import Controlador.GestorDatos;
+import Controlador.GestorApp;
 
 import java.util.Scanner;
 
 public class Menu {
-    private Scanner scanner=new Scanner(System.in);
-    private GestorDatos gestor;
-    private GestorAhorro ahorro;
-    private GestorBuscador buscador;
-    private GestorAnalisisFinanciero financias;
+    private final Scanner scanner = new Scanner(System.in);
+    private final GestorApp app;
 
-    public void mostrarMenu(){
-        leerOpciones();
-        ejecutarOpciones();
+    public Menu(GestorApp app) {
+        this.app = app;
     }
 
-    public void leerOpciones(){
-        System.out.println("Bienvenido al gestor de gastos");
-        System.out.println("1-Gestion de Gastos");
-        System.out.println("2-Meta de Ahorro");
-        System.out.println("3-Análisis financiero");
-        System.out.println("4-Tarjeta Bancaria");
-        System.out.println("0-Salir");
+    public void mostrarMenuPrincipal() {
+        int opcion;
+        do {
+            System.out.println("\n=== MENÚ PRINCIPAL ===");
+            System.out.println("1. Gestión de Gastos");
+            System.out.println("2. Meta Mensual");
+            System.out.println("3. Análisis Financiero");
+            System.out.println("4. Buscar Gastos");
+            System.out.println("5. Tarjeta Bancaria");
+            System.out.println("0. Salir");
+            System.out.print("Seleccione opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1 -> menuGestionGastos();
+                case 2 -> menuMetaMensual();
+                case 3 -> menuAnalisisFinanciero();
+                case 4 -> menuBuscarGastos();
+                case 5 -> menuTarjeta();
+                case 0 -> System.out.println("Saliendo del programa...");
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
     }
 
-    public void ejecutarOpciones(){
-        int eleccion= scanner.nextInt();
-        switch(eleccion){
-            case 1:
-                gestionDeGastosMenu();
-            case 2:
-                metaAhorroMenu();
-            case 3:
-                analisisFinancieroMenu();
-            case 4:
-                buscarGastosMenu();
-            case 0:
-                break;
-            default:
-                System.out.println("Error de input");
-        }
+    private void menuGestionGastos() {
+        int opcion;
+        do {
+            System.out.println("\n--- GESTIÓN DE GASTOS ---");
+            System.out.println("1. Registrar Gasto");
+            System.out.println("2. Ver Historial");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1 -> app.registrarGasto();
+                case 2 -> app.mostrarHistorial();
+                case 0 -> {}
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
     }
 
-    public void gestionDeGastosMenu(){
-        mostrarOpcionesGestionGastos();
-        ejecutarOpcionesGestionGastos();
+    private void menuMetaMensual() {
+        int opcion;
+        do {
+            System.out.println("\n--- META MENSUAL ---");
+            System.out.println("1. Definir o Actualizar Meta");
+            System.out.println("2. Ver Progreso de la Meta");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1 -> app.definirMeta();
+                case 2 -> app.verProgresoMeta();
+                case 0 -> {}
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
     }
 
-    public void metaAhorroMenu(){
-        mostrarOpcionesAhorro();
-        ejecutarOpcionesAhorro();
+    private void menuAnalisisFinanciero() {
+        int opcion;
+        do {
+            System.out.println("\n--- ANÁLISIS FINANCIERO ---");
+            System.out.println("1. Calcular Promedio de Gastos");
+            System.out.println("2. Ver Porcentaje por Categoría");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1 -> app.calcularPromedio();
+                case 2 -> app.verPorcentajeCategorias();
+                case 0 -> {}
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
     }
 
-    public void buscarGastosMenu(){
-        mostrarOpcionesGastos();
-        ejecutarOpcionesGastos();
+    private void menuBuscarGastos() {
+        int opcion;
+        do {
+            System.out.println("\n--- BUSCAR GASTOS ---");
+            System.out.println("1. Buscar por Categoría");
+            System.out.println("2. Buscar por Fecha");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1 -> app.buscarPorCategoria();
+                case 2 -> app.buscarPorFecha();
+                case 0 -> {}
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
     }
 
-    public void analisisFinancieroMenu(){
-        mostrarOpcionesAnalisisFinanciero();
-        ejecutarOpcionesAnalisisFinanciero();
+    private void menuTarjeta() {
+        int opcion;
+        do {
+            System.out.println("\n--- TARJETA BANCARIA ---");
+            System.out.println("1. Registrar Tarjeta");
+            System.out.println("2. Ver Saldo");
+            System.out.println("3. Recargar Tarjeta");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1 -> app.registrarTarjeta();
+                case 2 -> app.verSaldoTarjeta();
+                case 3 -> app.recargarTarjeta();
+                case 0 -> {}
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
     }
 
-    public void mostrarOpcionesGestionGastos(){
-        System.out.println("1-Registrar Gasto");
-        System.out.println("2-Ver Historial");
-        System.out.println("3-Volver");
-    }
-
-    public void mostrarOpcionesAhorro(){
-        System.out.println("1-Establecer Meta");
-        System.out.println("2-Ver Metas");
-        System.out.println("3-Volver");
-    }
-
-    public void mostrarOpcionesGastos(){
-        System.out.println("1-Buscar por fecha");
-        System.out.println("2-Buscar por categoria");
-        System.out.println("3-Volver");
-    }
-
-    public void mostrarOpcionesAnalisisFinanciero(){
-        System.out.println("1-Calcular Promedio");
-        System.out.println("2-Ver Porcentaje por Categoria");
-        System.out.println("3-Volver");
-    }
-
-    public void ejecutarOpcionesGestionGastos(){
-        int eleccion=scanner.nextInt();
-        switch (eleccion){
-            case 1:
-                gestor.agregarGasto();
-            case 2:
-                gestor.obtenerHistorial();
-            case 3:
-                break;
-            default:
-                System.out.println("Error de input");
-        }
-    }
-
-    public void ejecutarOpcionesAhorro(){
-        int eleccion= scanner.nextInt();
-        switch (eleccion){
-            case 1:
-                System.out.println("Proporcione meta ");
-                String meta=scanner.nextLine();
-                ahorro.agregarMeta(meta);
-            case 2:
-                ahorro.mostrarMetas();
-            case 3:
-                break;
-            default:
-                System.out.println("Error de input");
-        }
-    }
-
-    public void ejecutarOpcionesGastos(){
-        int eleccion= scanner.nextInt();
-        switch (eleccion){
-            case 1:
-                buscador.buscarPorFecha();
-            case 2:
-                buscador.buscarPorCategoria();
-            case 3:
-                break;
-            default:
-                System.out.println("Error de input");
-        }
-    }
-
-    public void ejecutarOpcionesAnalisisFinanciero(){
-        int eleccion= scanner.nextInt();
-        switch (eleccion){
-            case 1:
-                financias.calcularPromedio();
-            case 2:
-                financias.calcularPorcentajePorCategoria();
-            case 3:
-                break;
-            default:
-                System.out.println("Error de input");
+    private int leerEntero() {
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.print("Entrada inválida. Ingrese un número: ");
+            }
         }
     }
 }

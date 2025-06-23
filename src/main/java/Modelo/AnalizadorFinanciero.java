@@ -1,57 +1,34 @@
 package Modelo;
-import Modelo.*;
-
 
 import java.util.*;
 
 public class AnalizadorFinanciero {
 
-    // Calcula el promedio de todos los montos de gasto recibidos.
     public double calcularPromedio(List<Gasto> gastos) {
-        if (gastos == null || gastos.isEmpty()) {
-            return 0;
-        }
-
+        if (gastos == null || gastos.isEmpty()) return 0;
         double total = 0;
-
         for (Gasto g : gastos) {
-            total += g.getMonto(); // Suma el monto de cada gasto
+            total += g.getMonto();
         }
-
-        // Retorna el promedio dividiendo el total entre la cantidad de gastos
         return total / gastos.size();
     }
 
-    // Calcula el porcentaje de cada tipo de gasto dentro del total utilizando un ArrayList
-    public List<String> calcularPorcentajePorTipo(List<Gasto> gastos) {
-        double totalGeneral = 0;
-        List<String> resultados = new ArrayList<>();
+    public Map<String, Double> calcularPorcentajePorTipo(List<Gasto> gastos) {
+        Map<String, Double> porcentajes = new HashMap<>();
+        double total = gastos.stream().mapToDouble(Gasto::getMonto).sum();
+        if (total == 0) return porcentajes;
 
-        // Primero sumamos el total general
+        Map<String, Double> sumaPorCategoria = new HashMap<>();
         for (Gasto g : gastos) {
-            totalGeneral += g.getMonto();
+            sumaPorCategoria.put(g.getCategoria(),
+                    sumaPorCategoria.getOrDefault(g.getCategoria(), 0.0) + g.getMonto());
         }
 
-        // Ahora calculamos el porcentaje por cada categoría
-        List<String> categorias = new ArrayList<>(); // Para evitar repeticiones
-        for (Gasto g : gastos) {
-            if (!categorias.contains(g.getCategoria())) {
-                categorias.add(g.getCategoria());
-            }
+        for (String categoria : sumaPorCategoria.keySet()) {
+            double porcentaje = (sumaPorCategoria.get(categoria) * 100) / total;
+            porcentajes.put(categoria, porcentaje);
         }
 
-        // Para cada categoría, calculamos su porcentaje del total
-        for (String categoria : categorias) {
-            double totalCategoria = 0;
-            for (Gasto g : gastos) {
-                if (g.getCategoria().equals(categoria)) {
-                    totalCategoria += g.getMonto();
-                }
-            }
-            double porcentaje = (totalCategoria * 100) / totalGeneral;
-            resultados.add(categoria + ": " + porcentaje + "%");
-        }
-
-        return resultados;
+        return porcentajes;
     }
 }

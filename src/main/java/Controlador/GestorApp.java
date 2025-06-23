@@ -1,108 +1,131 @@
+// Archivo: Controlador/GestorApp.java
 package Controlador;
 
-import modelo.*;
-import vista.Menu;
+import Modelo.Gasto;
+import Modelo.Tarjeta;
+import Modelo.Usuario;
+import Vista.Menu;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class GestorApp {
-    private Usuario usuarioActual;
-    private GestorDatos gestorDatos;
-    private AnalizadorFinanciero analizador;
-    private Menu menu;
-    private Scanner scanner;
+    private final Usuario usuario;
+    private final GestorDatos gestorDatos;
+    private final GestorAnalisisFinanciero analisis;
+    private final GestorAhorro gestorAhorro;
+    private final GestorBuscador buscador;
+    private final Menu menu;
+    private final Scanner scanner;
 
-    public GestorApp() {
-        this.gestorDatos = new GestorDatos();
-        this.analizador = new AnalizadorFinanciero();
-        this.menu = new Menu();
+    public GestorApp(Usuario usuario) {
+        this.usuario = usuario;
+        this.gestorDatos = new GestorDatos(usuario);
+        this.analisis = new GestorAnalisisFinanciero(gestorDatos);
+        this.gestorAhorro = new GestorAhorro(gestorDatos);
+        this.buscador = new GestorBuscador(gestorDatos);
+        this.menu = new Menu(this);
         this.scanner = new Scanner(System.in);
     }
 
     public void iniciar() {
-        procesarLogin();
-        mostrarMenuPrincipal();
+        menu.mostrarMenuPrincipal();
     }
 
-    public void procesarLogin() {
-        System.out.print("Ingrese su nombre de usuario: ");
-        String nombre = scanner.nextLine();
-        this.usuarioActual = new Usuario(nombre);
-        this.usuarioActual.iniciarSesion();
-        gestorDatos.cargarUsuarios(); // carga todos los usuarios existentes
+    public void registrarGasto() {
+        gestorDatos.registrarGasto();
     }
 
-    public void mostrarMenuPrincipal() {
-        int opcion;
-        do {
-            menu.mostrarMenu();
-            opcion = menu.leerOpcion();
-            menu.ejecutarOpcion(opcion);
-        } while (opcion != 0);
-    }
-
-    public void registrarNuevoGasto() {
-        System.out.print("Monto del gasto: ");
-        double monto = Double.parseDouble(scanner.nextLine());
-        System.out.print("Categoría del gasto: ");
-        String categoria = scanner.nextLine();
-        Gasto gasto = new Gasto(monto, categoria);
-        gestorDatos.agregarGasto(gasto);
-        gestorDatos.guardarGasto(usuarioActual.getNombre(), gasto);
-    }
-
-    public void consultarHistorial() {
+    public void mostrarHistorial() {
         List<Gasto> historial = gestorDatos.obtenerHistorial();
-        for (Gasto g : historial) {
-            System.out.println(g.getFecha() + " - " + g.getCategoria() + ": $" + g.getMonto());
+        if (historial.isEmpty()) {
+            System.out.println("No hay gastos registrados.");
+        } else {
+            for (Gasto g : historial) {
+                System.out.printf("%s - %s - $%.2f - %s\n",
+                        g.getFecha(), g.getCategoria(), g.getMonto(), g.getDetalle());
+            }
         }
     }
 
-    public void generarReporteTotal() {
-        double total = gestorDatos.getTotalGastado();
+    public void definirMeta() {
+        System.out.print("Ingrese monto de la meta mensual: $");
+        double monto = Double.parseDouble(scanner.nextLine());
+        gestorAhorro.definirMeta(monto);
+        System.out.println("Meta guardada correctamente.");
+    }
+
+    public void verProgresoMeta() {
+        double meta = gestorAhorro.obtenerMetaActual();
+        double total = gestorDatos.obtenerTotalGastado();
+
+        System.out.println("\n--- Progreso de la Meta ---");
+        System.out.println("Meta mensual: $" + meta);
         System.out.println("Total gastado: $" + total);
+        System.out.println("Monto restante: $" + (meta - total));
     }
 
-    public void buscarGasto() {
-        System.out.print("Ingrese categoría a buscar: ");
-        String categoria = scanner.nextLine();
-        List<Gasto> resultados = gestorDatos.buscarPorCategoria(categoria);
-        for (Gasto g : resultados) {
-            System.out.println(g.getFecha() + " - " + g.getCategoria() + ": $" + g.getMonto());
-        }
-    }
-
-    public void generarReportePorcentajes() {
-        List<Gasto> gastos = gestorDatos.obtenerHistorial();
-        var porcentajes = analizador.calcularPorcentajePorTipo(gastos);
-        for (String cat : porcentajes.keySet()) {
-            System.out.println(cat + ": " + porcentajes.get(cat) + "%");
-        }
-    }
-
-    public void calcularPromedioGastos() {
-        List<Gasto> gastos = gestorDatos.obtenerHistorial();
-        double promedio = analizador.calcularPromedio(gastos);
+    public void calcularPromedio() {
+        double promedio = analisis.calcularPromedio();
         System.out.println("Promedio de gastos: $" + promedio);
     }
 
-    public void gestionarMetas() {
-        System.out.print("Monto de meta: ");
-        double monto = Double.parseDouble(scanner.nextLine());
-        System.out.print("Mes: ");
-        String mes = scanner.nextLine();
-        MetaAhorro meta = new MetaAhorro(monto, mes);
-        gestorDatos.establecerMeta(meta);
-        gestorDatos.guardarMeta(usuarioActual.getNombre(), meta);
+    public void verPorcentajeCategorias() {
+        analisis.mostrarPorcentajes();
     }
 
-    public void gestionarTarjetas() {
+    public void buscarPorCategoria() {
+        System.out.print("Ingrese categoría (Estudios, Alimentación, Transporte, Ocio, Varios): ");
+        String categoria = scanner.nextLine();
+        List<Gasto> resultados = buscador.buscarPorCategoria(categoria);
+        if (resultados.isEmpty()) {
+            System.out.println("No se encontraron resultados para esa categoría.");
+        } else {
+            resultados.forEach(g -> System.out.printf("%s - $%.2f - %s\n",
+                    g.getFecha(), g.getMonto(), g.getDetalle()));
+        }
+    }
+
+    public void buscarPorFecha() {
+        System.out.print("Ingrese fecha (dd/MM/yyyy): ");
+        String fecha = scanner.nextLine();
+        List<Gasto> resultados = buscador.buscarPorFecha(fecha);
+        if (resultados.isEmpty()) {
+            System.out.println("No se encontraron gastos en esa fecha.");
+        } else {
+            resultados.forEach(g -> System.out.printf("%s - $%.2f - %s\n",
+                    g.getCategoria(), g.getMonto(), g.getDetalle()));
+        }
+    }
+
+    public void registrarTarjeta() {
         System.out.print("Número de tarjeta: ");
         String numero = scanner.nextLine();
-        System.out.print("Saldo inicial: ");
+        System.out.print("Saldo inicial: $");
         double saldo = Double.parseDouble(scanner.nextLine());
         Tarjeta tarjeta = new Tarjeta(numero, saldo);
-        gestorDatos.guardarTarjeta(usuarioActual.getNombre(), tarjeta);
+        gestorDatos.guardarTarjeta(tarjeta);
+    }
+
+    public void verSaldoTarjeta() {
+        Tarjeta tarjeta = gestorDatos.getTarjeta();
+        if (tarjeta != null) {
+            System.out.println("Saldo actual: $" + tarjeta.getSaldo());
+        } else {
+            System.out.println("No hay tarjeta registrada.");
+        }
+    }
+
+    public void recargarTarjeta() {
+        Tarjeta tarjeta = gestorDatos.getTarjeta();
+        if (tarjeta != null) {
+            System.out.print("Monto a recargar: $");
+            double monto = Double.parseDouble(scanner.nextLine());
+            tarjeta.recargar(monto);
+            gestorDatos.guardarTarjeta(tarjeta);
+            System.out.println("Tarjeta recargada.");
+        } else {
+            System.out.println("No hay tarjeta registrada.");
+        }
     }
 }

@@ -1,32 +1,15 @@
+// Archivo: Modelo/Usuario.java
 package Modelo;
 
 public class Usuario {
-    private String name;
-    private String clave;
-    private boolean activo;
+    private String nombre;
 
-    public Usuario(String name, String clave){
-        this.name=name;
-        this.clave=clave;
+    public Usuario(String nombre) {
+        this.nombre = nombre;
     }
 
-    public boolean isActivo(){
-        return activo;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getClave(){
-        return clave;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public void iniciarSession(){
-        activo=true;
-    }
-
-    public void cerrarSession(){
-        activo=false;
-    }
 }

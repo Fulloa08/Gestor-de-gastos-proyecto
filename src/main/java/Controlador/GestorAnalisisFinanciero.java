@@ -1,77 +1,44 @@
+// Archivo: Controlador/GestorAnalisisFinanciero.java
 package Controlador;
 
-import modelo.Gasto;
+import Modelo.Gasto;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GestorAnalisisFinanciero {
-    private List<Gasto> gastos;
+    private final GestorDatos gestorDatos;
 
-    public GestorAnalisisFinanciero(List<Gasto> gastos) {
-        this.gastos = gastos;
+    public GestorAnalisisFinanciero(GestorDatos gestorDatos) {
+        this.gestorDatos = gestorDatos;
     }
 
     public double calcularPromedio() {
-        if (gastos.isEmpty()) return 0.0;
-        double total = calcularTotal();
-        return total / gastos.size();
+        List<Gasto> gastos = gestorDatos.obtenerHistorial();
+        if (gastos.isEmpty()) return 0;
+        return gastos.stream().mapToDouble(Gasto::getMonto).average().orElse(0);
     }
 
-    public double calcularTotal() {
-        double total = 0;
-        for (Gasto g : gastos) {
-            total += g.getMonto();
-        }
-        return total;
-    }
+    public void mostrarPorcentajes() {
+        List<Gasto> gastos = gestorDatos.obtenerHistorial();
+        double total = gastos.stream().mapToDouble(Gasto::getMonto).sum();
 
-    public Map<String, Double> calcularPorcentajePorCategoria() {
-        Map<String, Double> sumaPorCategoria = new HashMap<>();
-        double total = calcularTotal();
-
-        for (Gasto g : gastos) {
-            String categoria = g.getCategoria();
-            sumaPorCategoria.put(categoria, sumaPorCategoria.getOrDefault(categoria, 0.0) + g.getMonto());
+        if (total == 0) {
+            System.out.println("No hay gastos registrados para analizar.");
+            return;
         }
 
-        Map<String, Double> porcentajePorCategoria = new HashMap<>();
-        for (Map.Entry<String, Double> entry : sumaPorCategoria.entrySet()) {
-            porcentajePorCategoria.put(entry.getKey(), (entry.getValue() / total) * 100);
-        }
-
-        return porcentajePorCategoria;
-    }
-
-    public String categoriaMayorGasto() {
-        Map<String, Double> sumaPorCategoria = new HashMap<>();
+        Map<String, Double> porCategoria = new HashMap<>();
 
         for (Gasto g : gastos) {
-            String categoria = g.getCategoria();
-            sumaPorCategoria.put(categoria, sumaPorCategoria.getOrDefault(categoria, 0.0) + g.getMonto());
+            porCategoria.put(g.getCategoria(), porCategoria.getOrDefault(g.getCategoria(), 0.0) + g.getMonto());
         }
 
-        String categoriaMayor = "";
-        double max = -1;
-
-        for (Map.Entry<String, Double> entry : sumaPorCategoria.entrySet()) {
-            if (entry.getValue() > max) {
-                max = entry.getValue();
-                categoriaMayor = entry.getKey();
-            }
-        }
-
-        return categoriaMayor;
-    }
-
-    public void mostrarResumen() {
-        System.out.println("Resumen financiero:");
-        System.out.println("- Total: $" + calcularTotal());
-        System.out.println("- Promedio: $" + calcularPromedio());
-        System.out.println("- Categoría de mayor gasto: " + categoriaMayorGasto());
-        System.out.println("- Porcentaje por categoría:");
-        Map<String, Double> porcentajes = calcularPorcentajePorCategoria();
-        for (Map.Entry<String, Double> entry : porcentajes.entrySet()) {
-            System.out.printf("  * %s: %.2f%%\n", entry.getKey(), entry.getValue());
+        System.out.println("\n--- Porcentaje por Categoría ---");
+        for (Map.Entry<String, Double> entry : porCategoria.entrySet()) {
+            double porcentaje = (entry.getValue() / total) * 100;
+            System.out.printf("%s: %.2f%%\n", entry.getKey(), porcentaje);
         }
     }
 }

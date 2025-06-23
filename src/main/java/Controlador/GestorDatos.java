@@ -1,91 +1,150 @@
+// Archivo: Controlador/GestorDatos.java
 package Controlador;
 
 import Modelo.Gasto;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import Modelo.Tarjeta;
+import Modelo.Usuario;
+
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class GestorDatos {
-    private Scanner scanner = new Scanner(System.in);
-    private String nombreArchivo = "Gastos.txt";
-    private List<String> historial=new ArrayList<>();
-    private File archivo = new File(nombreArchivo);
-    private List<Gasto> gastos=new ArrayList<>();
+    private final String BASE_PATH = "data/";
+    private final String gastosFile;
+    private final String tarjetaFile;
+    private final String metaFile;
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final Scanner scanner = new Scanner(System.in);
+    private final List<String> categorias = Arrays.asList("Estudios", "Alimentación", "Transporte", "Ocio", "Varios");
 
-    public void agregarGasto() {
-        LocalDate ahora = LocalDate.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String fecha = ahora.format(formato);
-        System.out.println("Proporcione un monto a registrar");
-        double monto = scanner.nextFloat();
-        while (true) {
-            System.out.println("En que categoria quieres agregar este gasto: Comida, Estudio, Trasporte y Otros");
-            String categoria = scanner.nextLine().toLowerCase();
-            if (categoria.equals("comida") || categoria.equals("estudio") || categoria.equals("trasporte") || categoria.equals("otros")) {
-                break;
-            } else {
-                System.out.println("Error de input");
-            }
-            System.out.println("Proporcione un una nota o detalle (opcional)");
-            String detalle = scanner.nextLine();
-            Gasto gasto = new Gasto(fecha, categoria, monto, detalle);
-            gastos.add(gasto);
-            crearRegistroGasto(fecha, categoria, monto, detalle);
-        }
+    public GestorDatos(Usuario usuario) {
+        String nombre = usuario.getNombre();
+        this.gastosFile = BASE_PATH + "gastos_" + nombre + ".txt";
+        this.tarjetaFile = BASE_PATH + "tarjeta_" + nombre + ".txt";
+        this.metaFile = BASE_PATH + "meta_" + nombre + ".txt";
+        verificarOCrearArchivos();
     }
 
-    private void crearRegistroGasto(String fecha, String categoria, double monto, String detalle) {
+    private void verificarOCrearArchivos() {
         try {
-            if (!archivo.exists()) {
-                archivo.createNewFile();
-            }
-            FileWriter escritor = new FileWriter(archivo, true);
-            escritor.write(fecha.replaceAll("\\s+", "") + ";");
-            escritor.write(categoria.replaceAll("\\s+", "") + ";");
-            escritor.write(String.valueOf(monto).replaceAll("\\s+", "") + ";");
-            escritor.write(detalle.replaceAll("\\s+", "") + ";");
-            escritor.write(System.lineSeparator());
-            escritor.close();
+            new File(BASE_PATH).mkdirs();
+            new File(gastosFile).createNewFile();
+            new File(tarjetaFile).createNewFile();
+            new File(metaFile).createNewFile();
         } catch (IOException e) {
-            System.out.println("Error en la creacion del documento");
+            System.out.println("Error creando archivos: " + e.getMessage());
         }
     }
 
-    public List obtenerHistorial() {
-        if (!archivo.exists()) {
-            System.out.println("Error: No existe historial");
-            return historial;
-        } else {
-            try (Scanner lector =new Scanner(archivo)){
-                while (lector.hasNextLine()){
-                    String linea =lector.nextLine();
-                    historial.add(linea);
+    public void registrarGasto() {
+        System.out.println("Categorías disponibles: " + categorias);
+        System.out.print("Ingrese categoría: ");
+        String categoria = scanner.nextLine();
+        if (!categorias.contains(categoria)) {
+            System.out.println("Categoría inválida.");
+            return;
+        }
+        System.out.print("Monto: $");
+        double monto = Double.parseDouble(scanner.nextLine());
+        System.out.print("Detalle: ");
+        String detalle = scanner.nextLine();
+
+        Gasto gasto = new Gasto(LocalDate.now().format(FORMATTER), categoria, monto, detalle);
+        guardarGasto(gasto);
+        System.out.println("Gasto registrado correctamente.");
+    }
+
+    private void guardarGasto(Gasto gasto) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(gastosFile, true))) {
+            writer.write(gasto.getFecha() + ";" + gasto.getCategoria() + ";" + gasto.getMonto() + ";" + gasto.getDetalle());
+            writer.newLine();
+        } catch (IOException e) {
+            System.out.println("Error guardando gasto: " + e.getMessage());
+        }
+    }
+
+    public List<Gasto> obtenerHistorial() {
+        List<Gasto> gastos = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(gastosFile))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length == 4) {
+                    gastos.add(new Gasto(partes[0], partes[1], Double.parseDouble(partes[2]), partes[3]));
                 }
-            } catch (IOException e){
-                System.out.println("Error al leer el archivo: "+e.getMessage());
             }
-            return historial;
+        } catch (IOException e) {
+            System.out.println("Error leyendo historial: " + e.getMessage());
+        }
+        return gastos;
+    }
+
+    public double obtenerTotalGastado() {
+        return obtenerHistorial().stream().mapToDouble(Gasto::getMonto).sum();
+    }
+
+    public List<Gasto> buscarPorCategoria(String categoria) {
+        List<Gasto> resultados = new ArrayList<>();
+        for (Gasto g : obtenerHistorial()) {
+            if (g.getCategoria().equalsIgnoreCase(categoria)) {
+                resultados.add(g);
+            }
+        }
+        return resultados;
+    }
+
+    public List<Gasto> buscarPorFecha(String fecha) {
+        List<Gasto> resultados = new ArrayList<>();
+        for (Gasto g : obtenerHistorial()) {
+            if (g.getFecha().equals(fecha)) {
+                resultados.add(g);
+            }
+        }
+        return resultados;
+    }
+
+    public void guardarMeta(double meta) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile))) {
+            writer.write(String.valueOf(meta));
+        } catch (IOException e) {
+            System.out.println("Error guardando meta: " + e.getMessage());
         }
     }
 
-    public void limpiarDatos(){
-        if (!archivo.exists()){
-            System.out.println("Error: El archivo no existe");
-        } else {
-            try {
-                FileWriter escritor=new FileWriter(archivo, false);
-                escritor.write("");
-                escritor.close();
-                System.out.println("Historial eliminado");
-                gastos.clear();
-            } catch (IOException e) {
-                System.out.println("Error al borrar el historial: "+ e.getMessage());
+    public double cargarMeta() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(metaFile))) {
+            String linea = reader.readLine();
+            if (linea != null) {
+                return Double.parseDouble(linea);
             }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Error leyendo meta: " + e.getMessage());
         }
+        return 0;
+    }
+
+    public void guardarTarjeta(Tarjeta tarjeta) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tarjetaFile))) {
+            writer.write(tarjeta.getNumero() + ";" + tarjeta.getSaldo());
+        } catch (IOException e) {
+            System.out.println("Error guardando tarjeta: " + e.getMessage());
+        }
+    }
+
+    public Tarjeta getTarjeta() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(tarjetaFile))) {
+            String linea = reader.readLine();
+            if (linea != null) {
+                String[] partes = linea.split(";");
+                if (partes.length == 2) {
+                    return new Tarjeta(partes[0], Double.parseDouble(partes[1]));
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Error leyendo tarjeta: " + e.getMessage());
+        }
+        return null;
     }
 }

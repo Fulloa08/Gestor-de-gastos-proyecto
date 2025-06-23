@@ -1,3 +1,4 @@
+// Archivo: Modelo/Gasto.java
 package Modelo;
 
 public class Gasto {
@@ -6,26 +7,27 @@ public class Gasto {
     private double monto;
     private String detalle;
 
-    public Gasto(String fecha, String categoria, double monto, String detalle){
-        this.fecha=fecha;
-        this.categoria=categoria;
-        this.monto=monto;
-        this.detalle=detalle;
+    public Gasto(String fecha, String categoria, double monto, String detalle) {
+        this.fecha = fecha;
+        this.categoria = categoria;
+        this.monto = monto;
+        this.detalle = detalle;
     }
 
-    public String getFecha(){
+    public String getFecha() {
         return fecha;
     }
 
-    public String getCategoria(){
+    public String getCategoria() {
         return categoria;
     }
 
-    public double getMonto(){
+    public double getMonto() {
         return monto;
     }
 
-    public String getDetalle(){
+    public String getDetalle() {
         return detalle;
     }
 }
+
