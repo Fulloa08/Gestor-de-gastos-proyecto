@@ -1,5 +1,9 @@
 package Vista;
 
+import Controlador.GestorAhorro;
+import Controlador.GestorBuscador;
+import Controlador.GestorDatos;
+
 import java.util.Scanner;
 
 public class Menu {
@@ -103,9 +107,11 @@ public class Menu {
         int eleccion= scanner.nextInt();
         switch (eleccion){
             case 1:
-                Ahorro.crearAhorro();
+                System.out.println("Proporcione meta ");
+                String meta=scanner.nextLine();
+                ahorro.agregarMeta(meta);
             case 2:
-                Ahorro.verHistorial();
+                ahorro.mostrarMetas();
             case 3:
                 break;
             default:
@@ -117,9 +123,9 @@ public class Menu {
         int eleccion= scanner.nextInt();
         switch (eleccion){
             case 1:
-                buscador.buscarFecha();
+                buscador.buscarPorFecha();
             case 2:
-                buscador.buscarCategoria();
+                buscador.buscarPorCategoria();
             case 3:
                 break;
             default:

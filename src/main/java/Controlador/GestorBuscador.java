@@ -4,9 +4,11 @@ import Modelo.Gasto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class GestorBuscador {
     private List<Gasto> gastos;
+    Scanner scanner=new Scanner(System.in);
 
     public GestorBuscador(List<Gasto> gastos) {
         this.gastos = gastos;
@@ -16,7 +18,9 @@ public class GestorBuscador {
         this.gastos = gastos;
     }
 
-    public List<Gasto> buscarPorCategoria(String categoria) {
+    public List<Gasto> buscarPorCategoria() {
+        System.out.println("Seleccione una de las categorias: Comida, Estudio, Trasporte y Otros");
+        String categoria=scanner.nextLine();
         List<Gasto> resultados = new ArrayList<>();
         for (Gasto gasto : gastos) {
             if (gasto.getCategoria().equalsIgnoreCase(categoria)) {
@@ -26,7 +30,14 @@ public class GestorBuscador {
         return resultados;
     }
 
-    public List<Gasto> buscarPorFecha(String fecha) {
+    public List<Gasto> buscarPorFecha() {
+        System.out.println("Diga el dia");
+        String dia=scanner.nextLine();
+        System.out.println("Diga el mes");
+        String mes =scanner.nextLine();
+        System.out.println("Diga el año");
+        String año= scanner.nextLine();
+        String fecha=dia+"/"+mes+"/"+año;
         List<Gasto> resultados = new ArrayList<>();
         for (Gasto gasto : gastos) {
             if (gasto.getFecha().equalsIgnoreCase(fecha)) {
@@ -48,5 +59,8 @@ public class GestorBuscador {
 
     public void mostrarResultados(List<Gasto> resultados) {
         if (resultados.isEmpty()) {
-            System.out.println("No se encontraron resultad
+            System.out.println("No se encontraron resultados");
+        }
+    }
+}
 
