@@ -11,10 +11,10 @@ import java.util.Scanner;
 
 public class GestorApp {
     private final Usuario usuario;
-    private final GestorDatos gestorDatos;
-    private final GestorAnalisisFinanciero analisis;
-    private final GestorAhorro gestorAhorro;
-    private final GestorBuscador buscador;
+    GestorDatos gestorDatos;
+    GestorAnalisisFinanciero analisis;
+    GestorAhorro gestorAhorro;
+    GestorBuscador buscador;
     private final Menu menu;
     private final Scanner scanner;
 
