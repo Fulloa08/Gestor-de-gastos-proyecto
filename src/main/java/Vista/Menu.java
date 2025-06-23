@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.GestorAhorro;
+import Controlador.GestorAnalisisFinanciero;
 import Controlador.GestorBuscador;
 import Controlador.GestorDatos;
 
@@ -137,9 +138,9 @@ public class Menu {
         int eleccion= scanner.nextInt();
         switch (eleccion){
             case 1:
-                financias.promedio();
+                financias.calcularPromedio();
             case 2:
-                financias.porcentaje();
+                financias.calcularPorcentajePorCategoria();
             case 3:
                 break;
             default:
