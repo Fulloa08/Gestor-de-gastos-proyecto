@@ -1,5 +1,7 @@
 package Controlador;
 
+import Modelo.Usuario;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
