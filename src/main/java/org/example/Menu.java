@@ -3,11 +3,11 @@ package org.example;
 import java.util.Scanner;
 
 public class Menu {
-    Scanner scanner=new Scanner(System.in);
-    GestorDatos gestor;
-    GestorAhorro ahorro;
-    GestorBuscador buscador;
-    GestorAnalisisFinanciero financias;
+    private Scanner scanner=new Scanner(System.in);
+    private GestorDatos gestor;
+    private GestorAhorro ahorro;
+    private GestorBuscador buscador;
+    private GestorAnalisisFinanciero financias;
 
     public void main(String[] args) {
         mostrarMenu();

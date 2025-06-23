@@ -11,10 +11,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GestorDatos {
-    Scanner scanner = new Scanner(System.in);
-    String nombreArchivo = "Gastos.txt";
-    List<String> historial=new ArrayList<>();
-    File archivo = new File(nombreArchivo);
+    private Scanner scanner = new Scanner(System.in);
+    private String nombreArchivo = "Gastos.txt";
+    private List<String> historial=new ArrayList<>();
+    private File archivo = new File(nombreArchivo);
+    private List<Gasto> gastos=new ArrayList<>();
 
     public void agregarGasto() {
         LocalDate ahora = LocalDate.now();
@@ -33,13 +34,9 @@ public class GestorDatos {
             System.out.println("Proporcione un una nota o detalle (opcional)");
             String detalle = scanner.nextLine();
             Gasto gasto = new Gasto(fecha, categoria, monto, detalle);
+            gastos.add(gasto);
             crearRegistroGasto(fecha, categoria, monto, detalle);
-            regresarGasto(gasto);
         }
-    }
-
-    private Gasto regresarGasto(Gasto gasto){
-        return gasto;
     }
 
     private void crearRegistroGasto(String fecha, String categoria, double monto, String detalle) {
@@ -85,6 +82,7 @@ public class GestorDatos {
                 escritor.write("");
                 escritor.close();
                 System.out.println("Historial eliminado");
+                gastos.clear();
             } catch (IOException e) {
                 System.out.println("Error al borrar el historial: "+ e.getMessage());
             }
