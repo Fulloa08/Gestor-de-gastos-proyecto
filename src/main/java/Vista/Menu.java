@@ -1,4 +1,4 @@
-package org.example;
+package Vista;
 
 import java.util.Scanner;
 
@@ -8,10 +8,6 @@ public class Menu {
     private GestorAhorro ahorro;
     private GestorBuscador buscador;
     private GestorAnalisisFinanciero financias;
-
-    public void main(String[] args) {
-        mostrarMenu();
-    }
 
     public void mostrarMenu(){
         leerOpciones();
