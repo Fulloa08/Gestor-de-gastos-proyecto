@@ -16,12 +16,12 @@ public class Main {
         String nombre = scanner.nextLine().trim();
 
         System.out.print("Ingrese su contraseña: ");
-        String contrasena = scanner.nextLine().trim();
+        String clave = scanner.nextLine().trim();
 
-        boolean autenticado = GestorUsuario.autenticarUsuario(nombre, contrasena);
+        boolean autenticado = GestorUsuario.autenticarUsuario(nombre, clave);
 
         if (autenticado) {
-            Usuario usuario = new Usuario(nombre);
+            Usuario usuario = new Usuario(nombre,clave);
             GestorApp app = new GestorApp(usuario);
             app.iniciar();
         } else {

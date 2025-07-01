@@ -38,7 +38,7 @@ public class Menu {
         } while (opcion != 0);
     }
 
-    private void menuGestionGastos() {
+    public void menuGestionGastos() {
         int opcion;
         do {
             System.out.println("\n--- GESTIÓN DE GASTOS ---");
@@ -57,7 +57,7 @@ public class Menu {
         } while (opcion != 0);
     }
 
-    private void menuMetaMensual() {
+    public void menuMetaMensual() {
         int opcion;
         do {
             System.out.println("\n--- META MENSUAL ---");
@@ -76,7 +76,7 @@ public class Menu {
         } while (opcion != 0);
     }
 
-    private void menuAnalisisFinanciero() {
+    public void menuAnalisisFinanciero() {
         int opcion;
         do {
             System.out.println("\n--- ANÁLISIS FINANCIERO ---");
@@ -95,7 +95,7 @@ public class Menu {
         } while (opcion != 0);
     }
 
-    private void menuBuscarGastos() {
+    public void menuBuscarGastos() {
         int opcion;
         do {
             System.out.println("\n--- BUSCAR GASTOS ---");
@@ -114,7 +114,7 @@ public class Menu {
         } while (opcion != 0);
     }
 
-    private void menuTarjeta() {
+    public void menuTarjeta() {
         int opcion;
         do {
             System.out.println("\n--- TARJETA BANCARIA ---");
