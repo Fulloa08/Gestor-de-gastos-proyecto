@@ -17,7 +17,7 @@ public class GestorAppTest {
 
     @BeforeEach
     public void setUp() {
-        Usuario usuario = new Usuario("Felipe");
+        Usuario usuario = new Usuario("Felipe","12");
         app = new GestorApp(usuario);
     }
 

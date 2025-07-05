@@ -16,7 +16,7 @@ class GestorDatosTest {
     @Test
     void testRegistrarGastoWithValidData() throws IOException {
         // Arrange
-        Usuario usuario = new Usuario("testUser");
+        Usuario usuario = new Usuario("testUser","23");
         GestorDatos gestorDatos = new GestorDatos(usuario);
         String gastosFile = "data/gastos_testUser.txt";
         Files.deleteIfExists(Paths.get(gastosFile));
@@ -44,7 +44,7 @@ class GestorDatosTest {
     @Test
     void testRegistrarGastoWithInvalidCategory() throws IOException {
         // Arrange
-        Usuario usuario = new Usuario("testUser");
+        Usuario usuario = new Usuario("testUser", "12");
         GestorDatos gestorDatos = new GestorDatos(usuario);
         String gastosFile = "data/gastos_testUser.txt";
         Files.deleteIfExists(Paths.get(gastosFile));
@@ -63,7 +63,7 @@ class GestorDatosTest {
     @Test
     void testRegistrarGastoWithLargeAmount() throws IOException {
         // Arrange
-        Usuario usuario = new Usuario("testUser");
+        Usuario usuario = new Usuario("testUser","12");
         GestorDatos gestorDatos = new GestorDatos(usuario);
         String gastosFile = "data/gastos_testUser.txt";
         Files.deleteIfExists(Paths.get(gastosFile));
@@ -91,7 +91,7 @@ class GestorDatosTest {
     @Test
     void testRegistrarGastoEmptyCategory() throws IOException {
         // Arrange
-        Usuario usuario = new Usuario("testUser");
+        Usuario usuario = new Usuario("testUser","12");
         GestorDatos gestorDatos = new GestorDatos(usuario);
         String gastosFile = "data/gastos_testUser.txt";
         Files.deleteIfExists(Paths.get(gastosFile));

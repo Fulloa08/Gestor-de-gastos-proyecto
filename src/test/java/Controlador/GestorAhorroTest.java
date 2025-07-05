@@ -12,11 +12,12 @@ class GestorAhorroTest {
     private GestorDatos gestorDatos;
     private GestorAhorro gestorAhorro;
     private final String usuarioPrueba = "testuser";
+    private final String clavePrueba="13";
     private File metaFile;
 
     @BeforeEach
     void setUp() {
-        gestorDatos = new GestorDatos(new Usuario(usuarioPrueba));
+        gestorDatos = new GestorDatos(new Usuario(usuarioPrueba,clavePrueba));
         gestorAhorro = new GestorAhorro(gestorDatos);
         metaFile = new File("data/meta_" + usuarioPrueba + ".txt");
         metaFile.delete();

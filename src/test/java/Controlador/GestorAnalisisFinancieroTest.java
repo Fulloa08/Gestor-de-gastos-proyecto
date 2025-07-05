@@ -14,15 +14,16 @@ class GestorAnalisisFinancieroTest {
     private GestorDatos gestorDatos;
     private GestorAnalisisFinanciero gestorAnalisis;
     private final String usuarioPrueba = "testuser";
+    private final String clavePrueba="32";
     private File gastosFile;
 
     @BeforeEach
     void setUp() {
-        gestorDatos = new GestorDatos(new Usuario(usuarioPrueba));
+        gestorDatos = new GestorDatos(new Usuario(usuarioPrueba,clavePrueba));
         gestorAnalisis = new GestorAnalisisFinanciero(gestorDatos);
         gastosFile = new File("data/gastos_" + usuarioPrueba + ".txt");
         gastosFile.delete();
-        gestorDatos = new GestorDatos(new Usuario(usuarioPrueba)); // recrear limpio
+        gestorDatos = new GestorDatos(new Usuario(usuarioPrueba,clavePrueba)); // recrear limpio
         gestorAnalisis = new GestorAnalisisFinanciero(gestorDatos);
     }
 
