@@ -2,6 +2,7 @@
 package Vista;
 
 import Controlador.GestorApp;
+import Modelo.Usuario;
 
 import java.util.Scanner;
 

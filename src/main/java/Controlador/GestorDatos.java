@@ -56,7 +56,7 @@ public class GestorDatos {
         System.out.println("Gasto registrado correctamente.");
     }
 
-    void guardarGasto(Gasto gasto) {
+    public void guardarGasto(Gasto gasto) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(gastosFile, true))) {
             writer.write(gasto.getFecha() + ";" + gasto.getCategoria() + ";" + gasto.getMonto() + ";" + gasto.getDetalle());
             writer.newLine();

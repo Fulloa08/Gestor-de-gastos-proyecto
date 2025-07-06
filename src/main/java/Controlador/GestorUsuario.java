@@ -19,41 +19,35 @@ public class GestorUsuario {
     // Verifica usuario con contraseña o lo registra si no existe
     public static boolean autenticarUsuario(String nombre, String contrasena) {
         File archivoUsuarios = new File("data/usuarios.txt");
+
         try {
             if (!archivoUsuarios.exists()) {
                 archivoUsuarios.getParentFile().mkdirs();
                 archivoUsuarios.createNewFile();
             }
 
-            List<String> lineas = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new FileReader(archivoUsuarios))) {
                 String linea;
                 while ((linea = reader.readLine()) != null) {
-                    lineas.add(linea);
                     String[] partes = linea.split(";");
-                    if (partes.length == 2 && partes[0].equals(nombre)) {
-                        return partes[1].equals(contrasena);
+                    if (partes.length == 2) {
+                        String nombreArchivo = partes[0].trim();
+                        String claveArchivo = partes[1].trim();
+
+                        if (nombreArchivo.equals(nombre.trim()) && claveArchivo.equals(contrasena.trim())) {
+                            return true;
+                        }
                     }
                 }
             }
 
-            // Si no existe, registrarlo
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoUsuarios, true))) {
-                writer.write(nombre + ";" + contrasena);
-                writer.newLine();
-                System.out.println("Usuario registrado correctamente.");
-            }
-
-            // Crear archivos asociados
-            crearArchivosUsuario(nombre);
-
-            return true;
-
         } catch (IOException e) {
             System.out.println("Error autenticando usuario: " + e.getMessage());
         }
-        return false;
+
+        return false; // No se encontró coincidencia
     }
+
 
     // Crea archivos necesarios por usuario si no existen
     private static void crearArchivosUsuario(String nombreUsuario) {
@@ -72,5 +66,33 @@ public class GestorUsuario {
         }
     }
 
+    public static boolean registrarUsuario(String nombre, String contrasena) {
+        File archivoUsuarios = new File("data/usuarios.txt");
 
+        try {
+            // Verificar si ya existe el usuario
+            try (BufferedReader reader = new BufferedReader(new FileReader(archivoUsuarios))) {
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    String[] partes = linea.split(";");
+                    if (partes.length == 2 && partes[0].trim().equals(nombre.trim())) {
+                        return false; // Usuario ya existe
+                    }
+                }
+            }
+
+            // Registrar el nuevo usuario
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoUsuarios, true))) {
+                writer.write(nombre + ";" + contrasena);
+                writer.newLine();
+            }
+
+            // Puedes agregar aquí: crearArchivosUsuario(nombre);
+            return true;
+
+        } catch (IOException e) {
+            System.out.println("Error registrando usuario: " + e.getMessage());
+            return false;
+        }
+    }
 }

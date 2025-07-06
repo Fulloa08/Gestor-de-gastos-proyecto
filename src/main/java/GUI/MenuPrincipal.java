@@ -1,13 +1,16 @@
 package GUI;
 
 import javax.swing.*;
+
+import Modelo.Usuario;
 import Vista.Menu;
 
 public class MenuPrincipal extends JFrame {
-
+    protected final Usuario usuario;
     protected final Menu menu;
 
-    public MenuPrincipal(Menu menu) {
+    public MenuPrincipal(Menu menu, Usuario usuario) {
+        this.usuario=usuario;
         this.menu = menu;
         setTitle("Bienvenido al sistema de gestión");
         configurarVentana();
@@ -46,11 +49,11 @@ public class MenuPrincipal extends JFrame {
 
     protected void lanzarOpcion(int opcion) {
         JFrame siguiente = switch (opcion) {
-            case 1 -> new MenuGestorGastos(menu);
-            case 2 -> new MenuMeta(menu);
-            case 3 -> new MenuAnalisisFinanciero(menu);
-            case 4 -> new MenuBuscador(menu);
-            case 5 -> new MenuMostrarTarjeta(menu);
+            case 1 -> new MenuGestorGastos(menu,usuario);
+            case 2 -> new MenuMeta(menu,usuario);
+            case 3 -> new MenuAnalisisFinanciero(menu,usuario);
+            case 4 -> new MenuBuscador(menu,usuario);
+            case 5 -> new MenuMostrarTarjeta(menu,usuario);
             default -> null;
         };
         if (opcion == 6) System.exit(0);
