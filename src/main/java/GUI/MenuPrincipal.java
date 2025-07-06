@@ -5,11 +5,12 @@ import javax.swing.*;
 import Modelo.Usuario;
 import Vista.Menu;
 
-public class MenuPrincipal extends JFrame {
+public class MenuPrincipal extends VentanaMenu {
     protected final Usuario usuario;
     protected final Menu menu;
 
     public MenuPrincipal(Menu menu, Usuario usuario) {
+        super(menu,usuario);
         this.usuario=usuario;
         this.menu = menu;
         setTitle("Bienvenido al sistema de gestión");

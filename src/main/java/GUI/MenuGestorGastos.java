@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class MenuGestorGastos extends MenuPrincipal {
+public class MenuGestorGastos extends VentanaMenu {
     private final GestorDatos gestorDatos;
     private final Usuario usuario;
 

@@ -1,15 +1,13 @@
 package GUI;
-
 import Controlador.GestorApp;
 import Controlador.GestorAhorro;
 import Controlador.GestorDatos;
 import Modelo.Usuario;
 import Vista.Menu;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuMeta extends MenuPrincipal {
+public class MenuMeta extends VentanaMenu {
     private final Usuario usuario;
     private final GestorDatos gestorDatos;
     private final GestorAhorro gestorAhorro;
@@ -19,7 +17,6 @@ public class MenuMeta extends MenuPrincipal {
         this.usuario = usuario;
         this.gestorDatos = new GestorDatos(usuario);
         this.gestorAhorro = new GestorAhorro(gestorDatos);
-
         setTitle("Meta Mensual");
         getContentPane().removeAll();
         repaint();
@@ -29,32 +26,25 @@ public class MenuMeta extends MenuPrincipal {
     @Override
     protected void inicializarComponentes() {
         setLayout(null);
-
         JLabel lblMeta = new JLabel("Meta mensual actual:");
         lblMeta.setBounds(50, 40, 200, 25);
         add(lblMeta);
-
         JLabel lblMetaValor = new JLabel(String.format("$%.2f", gestorAhorro.obtenerMetaActual()));
         lblMetaValor.setBounds(220, 40, 100, 25);
         add(lblMetaValor);
-
         JLabel lblProgreso = new JLabel("Total gastado:");
         lblProgreso.setBounds(50, 80, 200, 25);
         add(lblProgreso);
-
         JLabel lblTotalGastado = new JLabel(String.format("$%.2f", gestorDatos.obtenerTotalGastado()));
         lblTotalGastado.setBounds(220, 80, 100, 25);
         add(lblTotalGastado);
-
         JLabel lblRestante = new JLabel("Monto restante:");
         lblRestante.setBounds(50, 120, 200, 25);
         add(lblRestante);
-
         double restante = gestorAhorro.obtenerMetaActual() - gestorDatos.obtenerTotalGastado();
         JLabel lblRestanteValor = new JLabel(String.format("$%.2f", restante));
         lblRestanteValor.setBounds(220, 120, 100, 25);
         add(lblRestanteValor);
-
         JButton btnDefinirMeta = new JButton("Definir nueva meta");
         btnDefinirMeta.setBounds(50, 170, 200, 30);
         btnDefinirMeta.addActionListener(e -> {
@@ -74,7 +64,6 @@ public class MenuMeta extends MenuPrincipal {
             }
         });
         add(btnDefinirMeta);
-
         JButton btnVolver = new JButton("Volver");
         btnVolver.setBounds(50, 220, 200, 30);
         btnVolver.addActionListener(e -> {

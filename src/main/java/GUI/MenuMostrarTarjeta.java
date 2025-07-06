@@ -7,7 +7,7 @@ import Vista.Menu;
 
 import javax.swing.*;
 
-public class MenuMostrarTarjeta extends MenuPrincipal {
+public class MenuMostrarTarjeta extends VentanaMenu{
     private final Usuario usuario;
     private final GestorDatos gestorDatos;
 
@@ -15,7 +15,6 @@ public class MenuMostrarTarjeta extends MenuPrincipal {
         super(menu, usuario);
         this.usuario = usuario;
         this.gestorDatos = new GestorDatos(usuario);
-
         setTitle("Gestión de Tarjeta");
         getContentPane().removeAll();
         repaint();
@@ -25,25 +24,30 @@ public class MenuMostrarTarjeta extends MenuPrincipal {
     @Override
     protected void inicializarComponentes() {
         setLayout(null);
-
         Tarjeta tarjeta = gestorDatos.getTarjeta();
-
         JLabel lblNumero = new JLabel("Número de tarjeta:");
         lblNumero.setBounds(50, 30, 120, 25);
         add(lblNumero);
-
-        JLabel lblNumeroValor = new JLabel(tarjeta != null ? tarjeta.getNumero() : "No registrada");
+        JLabel lblNumeroValor = new JLabel();
         lblNumeroValor.setBounds(180, 30, 200, 25);
         add(lblNumeroValor);
-
         JLabel lblSaldo = new JLabel("Saldo actual:");
         lblSaldo.setBounds(50, 70, 120, 25);
         add(lblSaldo);
-
-        JLabel lblSaldoValor = new JLabel(tarjeta != null ? String.format("$%.2f", tarjeta.getSaldo()) : "$0.00");
+        JLabel lblSaldoValor = new JLabel();
         lblSaldoValor.setBounds(180, 70, 200, 25);
         add(lblSaldoValor);
-
+        if (tarjeta != null) {
+            lblNumeroValor.setText(tarjeta.getNumero());
+            lblSaldoValor.setText(String.format("$%.2f", tarjeta.getSaldo()));
+        } else {
+            lblNumeroValor.setText("No registrada");
+            lblSaldoValor.setText("$0.00");
+            JOptionPane.showMessageDialog(this,
+                    "No hay tarjeta registrada. Por favor registre una.",
+                    "Información",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
         JButton btnRecargar = new JButton("Recargar saldo");
         btnRecargar.setBounds(50, 110, 200, 30);
         btnRecargar.addActionListener(e -> {
@@ -57,8 +61,8 @@ public class MenuMostrarTarjeta extends MenuPrincipal {
                     double monto = Double.parseDouble(input.trim());
                     tarjeta.recargar(monto);
                     gestorDatos.guardarTarjeta(tarjeta);
-                    JOptionPane.showMessageDialog(this, "Saldo recargado correctamente.");
                     lblSaldoValor.setText(String.format("$%.2f", tarjeta.getSaldo()));
+                    JOptionPane.showMessageDialog(this, "Saldo recargado correctamente.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Monto inválido.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -83,15 +87,14 @@ public class MenuMostrarTarjeta extends MenuPrincipal {
                 double saldo = Double.parseDouble(saldoStr.trim());
                 Tarjeta nuevaTarjeta = new Tarjeta(numero.trim(), saldo);
                 gestorDatos.guardarTarjeta(nuevaTarjeta);
-                JOptionPane.showMessageDialog(this, "Tarjeta registrada correctamente.");
                 lblNumeroValor.setText(nuevaTarjeta.getNumero());
                 lblSaldoValor.setText(String.format("$%.2f", nuevaTarjeta.getSaldo()));
+                JOptionPane.showMessageDialog(this, "Tarjeta registrada correctamente.");
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Saldo inválido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         add(btnRegistrar);
-
         JButton btnVolver = new JButton("Volver");
         btnVolver.setBounds(50, 190, 200, 30);
         btnVolver.addActionListener(e -> {

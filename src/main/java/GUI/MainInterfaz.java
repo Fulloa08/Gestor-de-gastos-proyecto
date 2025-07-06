@@ -1,10 +1,8 @@
 package GUI;
-
 import Controlador.GestorUsuario;
 import Modelo.Usuario;
 import Vista.Menu;
 import Controlador.GestorApp;
-
 import javax.swing.*;
 
 public class MainInterfaz {
@@ -13,7 +11,6 @@ public class MainInterfaz {
             while (true) {
                 JTextField usuarioField = new JTextField();
                 JPasswordField claveField = new JPasswordField();
-
                 JPanel panel = new JPanel();
                 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
                 panel.add(new JLabel("Nombre de usuario:"));
@@ -21,7 +18,6 @@ public class MainInterfaz {
                 panel.add(Box.createVerticalStrut(10));
                 panel.add(new JLabel("Contraseña:"));
                 panel.add(claveField);
-
                 int result = JOptionPane.showOptionDialog(
                         null,
                         panel,

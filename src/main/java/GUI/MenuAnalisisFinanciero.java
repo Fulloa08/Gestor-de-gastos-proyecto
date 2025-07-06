@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MenuAnalisisFinanciero extends MenuPrincipal {
+public class MenuAnalisisFinanciero extends VentanaMenu {
     private final GestorDatos gestorDatos;
     private final GestorAnalisisFinanciero analisis;
     private final Usuario usuario;

@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class MenuBuscador extends MenuPrincipal {
+public class MenuBuscador extends VentanaMenu {
     private final GestorBuscador gestorBuscador;
     private final GestorDatos gestorDatos;
     private final Usuario usuario;
