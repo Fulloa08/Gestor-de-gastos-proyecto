@@ -1,17 +1,15 @@
 package GUI;
 
 import Modelo.Usuario;
-import Vista.Menu;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class VentanaMenu extends JFrame {
     protected final Usuario usuario;
-    protected final Menu menu;
 
-    public VentanaMenu(Menu menu, Usuario usuario) {
+    public VentanaMenu(Usuario usuario) {
         this.usuario = usuario;
-        this.menu = menu;
         setTitle("Bienvenido al sistema de gestión");
         configurarVentana();
     }

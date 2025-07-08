@@ -30,13 +30,24 @@ public class GestorDatos {
     private void verificarOCrearArchivos() {
         try {
             new File(BASE_PATH).mkdirs();
+
             new File(gastosFile).createNewFile();
-            new File(tarjetaFile).createNewFile();
             new File(metaFile).createNewFile();
+
+            File archivoTarjeta = new File(tarjetaFile);
+            if (archivoTarjeta.createNewFile()) {
+                // Si el archivo no existía y fue creado, escribe datos iniciales
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoTarjeta))) {
+                    String numero = generarNumeroTarjeta();
+                    double saldoInicial = 100000; // saldo simulado
+                    writer.write(numero + ";" + saldoInicial);
+                }
+            }
         } catch (IOException e) {
             System.out.println("Error creando archivos: " + e.getMessage());
         }
     }
+
 
     public void registrarGasto() {
         System.out.println("Categorías disponibles: " + categorias);
@@ -125,13 +136,15 @@ public class GestorDatos {
         return 0;
     }
 
-    public void guardarTarjeta(Tarjeta tarjeta) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tarjetaFile))) {
-            writer.write(tarjeta.getNumero() + ";" + tarjeta.getSaldo());
-        } catch (IOException e) {
-            System.out.println("Error guardando tarjeta: " + e.getMessage());
-        }
+
+    private String generarNumeroTarjeta() {
+        Random rand = new Random();
+        return String.format("%04d-%04d-%04d-%04d",
+                rand.nextInt(10000), rand.nextInt(10000),
+                rand.nextInt(10000), rand.nextInt(10000));
     }
+
+
 
     public Tarjeta getTarjeta() {
         try (BufferedReader reader = new BufferedReader(new FileReader(tarjetaFile))) {

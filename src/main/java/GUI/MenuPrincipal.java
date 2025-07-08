@@ -2,17 +2,20 @@ package GUI;
 
 import javax.swing.*;
 
+import Controlador.GestorApp;
+import Controlador.GestorDatos;
 import Modelo.Usuario;
-import Vista.Menu;
+
+import java.awt.*;
 
 public class MenuPrincipal extends VentanaMenu {
     protected final Usuario usuario;
-    protected final Menu menu;
+    protected final GestorApp app;
 
-    public MenuPrincipal(Menu menu, Usuario usuario) {
-        super(menu,usuario);
+    public MenuPrincipal(Usuario usuario) {
+        super(usuario);
         this.usuario=usuario;
-        this.menu = menu;
+        this.app = new GestorApp(usuario);
         setTitle("Bienvenido al sistema de gestión");
         configurarVentana();
         inicializarComponentes();
@@ -50,11 +53,11 @@ public class MenuPrincipal extends VentanaMenu {
 
     protected void lanzarOpcion(int opcion) {
         JFrame siguiente = switch (opcion) {
-            case 1 -> new MenuGestorGastos(menu,usuario);
-            case 2 -> new MenuMeta(menu,usuario);
-            case 3 -> new MenuAnalisisFinanciero(menu,usuario);
-            case 4 -> new MenuBuscador(menu,usuario);
-            case 5 -> new MenuMostrarTarjeta(menu,usuario);
+            case 1 -> new MenuGestorGastos(usuario);
+            case 2 -> new MenuMeta(usuario);
+            case 3 -> new MenuAnalisisFinanciero(usuario);
+            case 4 -> new MenuBuscador(usuario);
+            case 5 -> new MenuMostrarTarjeta(usuario);
             default -> null;
         };
         if (opcion == 6) System.exit(0);

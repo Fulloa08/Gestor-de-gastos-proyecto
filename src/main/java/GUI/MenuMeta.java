@@ -1,9 +1,8 @@
 package GUI;
-import Controlador.GestorApp;
 import Controlador.GestorAhorro;
 import Controlador.GestorDatos;
 import Modelo.Usuario;
-import Vista.Menu;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,8 +11,8 @@ public class MenuMeta extends VentanaMenu {
     private final GestorDatos gestorDatos;
     private final GestorAhorro gestorAhorro;
 
-    public MenuMeta(Menu menu, Usuario usuario) {
-        super(menu, usuario);
+    public MenuMeta(Usuario usuario) {
+        super(usuario);
         this.usuario = usuario;
         this.gestorDatos = new GestorDatos(usuario);
         this.gestorAhorro = new GestorAhorro(gestorDatos);
@@ -67,7 +66,7 @@ public class MenuMeta extends VentanaMenu {
         JButton btnVolver = new JButton("Volver");
         btnVolver.setBounds(50, 220, 200, 30);
         btnVolver.addActionListener(e -> {
-            new MenuPrincipal(menu, usuario).setVisible(true);
+            new MenuPrincipal(usuario).setVisible(true);
             dispose();
         });
         add(btnVolver);

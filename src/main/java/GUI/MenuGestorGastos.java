@@ -3,7 +3,6 @@ package GUI;
 import Controlador.GestorDatos;
 import Modelo.Gasto;
 import Modelo.Usuario;
-import Vista.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +10,9 @@ import java.util.List;
 
 public class MenuGestorGastos extends VentanaMenu {
     private final GestorDatos gestorDatos;
-    private final Usuario usuario;
 
-    public MenuGestorGastos(Menu menu, Usuario usuario) {
-        super(menu,usuario);
-        this.usuario = usuario;
+    public MenuGestorGastos(Usuario usuario) {
+        super(usuario);
         this.gestorDatos = new GestorDatos(usuario);
 
         setTitle("Gestor de Gastos");
@@ -23,7 +20,6 @@ public class MenuGestorGastos extends VentanaMenu {
         repaint();
         inicializarComponentes();
     }
-
 
     @Override
     protected void inicializarComponentes() {
@@ -42,7 +38,7 @@ public class MenuGestorGastos extends VentanaMenu {
         JButton volver = new JButton("Volver");
         volver.setBounds(100, 130, 200, 30);
         volver.addActionListener(e -> {
-            new MenuPrincipal(menu,usuario).setVisible(true);
+            new MenuPrincipal(usuario).setVisible(true);
             dispose();
         });
         add(volver);

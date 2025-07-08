@@ -4,9 +4,9 @@ import Controlador.GestorAnalisisFinanciero;
 import Controlador.GestorDatos;
 import Modelo.Gasto;
 import Modelo.Usuario;
-import Vista.Menu;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +16,8 @@ public class MenuAnalisisFinanciero extends VentanaMenu {
     private final GestorAnalisisFinanciero analisis;
     private final Usuario usuario;
 
-    public MenuAnalisisFinanciero(Menu menu, Usuario usuario) {
-        super(menu, usuario);
+    public MenuAnalisisFinanciero(Usuario usuario) {
+        super(usuario);
         this.usuario = usuario;
         this.gestorDatos = new GestorDatos(usuario);
         this.analisis = new GestorAnalisisFinanciero(gestorDatos);
@@ -45,7 +45,7 @@ public class MenuAnalisisFinanciero extends VentanaMenu {
         JButton volver = new JButton("Volver");
         volver.setBounds(80, 130, 240, 30);
         volver.addActionListener(e -> {
-            new MenuPrincipal(menu, usuario).setVisible(true);
+            new MenuPrincipal(usuario).setVisible(true);
             dispose();
         });
         add(volver);

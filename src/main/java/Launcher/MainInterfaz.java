@@ -1,8 +1,9 @@
-package GUI;
+package Launcher;
+
 import Controlador.GestorUsuario;
+import GUI.MenuPrincipal;
 import Modelo.Usuario;
-import Vista.Menu;
-import Controlador.GestorApp;
+
 import javax.swing.*;
 
 public class MainInterfaz {
@@ -44,9 +45,7 @@ public class MainInterfaz {
 
                 if (GestorUsuario.autenticarUsuario(usuario, clave)) {
                     Usuario user = new Usuario(usuario, clave);
-                    GestorApp app = new GestorApp(user);
-                    Menu menu = new Menu(app);
-                    new MenuPrincipal(menu,user).setVisible(true);
+                    new MenuPrincipal(user).setVisible(true);
                     break;
                 } else {
                     int opcion = JOptionPane.showConfirmDialog(
@@ -61,9 +60,7 @@ public class MainInterfaz {
                         if (exito) {
                             JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente.");
                             Usuario user = new Usuario(usuario, clave);
-                            GestorApp app = new GestorApp(user);
-                            Menu menu = new Menu(app);
-                            new MenuPrincipal(menu,user).setVisible(true);
+                            new MenuPrincipal(user).setVisible(true);
                             break;
                         } else {
                             JOptionPane.showMessageDialog(null, "Error: El usuario ya existe.");

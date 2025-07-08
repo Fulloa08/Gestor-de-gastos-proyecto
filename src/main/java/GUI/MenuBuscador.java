@@ -4,7 +4,6 @@ import Controlador.GestorBuscador;
 import Controlador.GestorDatos;
 import Modelo.Gasto;
 import Modelo.Usuario;
-import Vista.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +14,8 @@ public class MenuBuscador extends VentanaMenu {
     private final GestorDatos gestorDatos;
     private final Usuario usuario;
 
-    public MenuBuscador(Menu menu, Usuario usuario) {
-        super(menu, usuario);
+    public MenuBuscador(Usuario usuario) {
+        super(usuario);
         this.usuario = usuario;
         this.gestorDatos = new GestorDatos(usuario);
         this.gestorBuscador = new GestorBuscador(gestorDatos);
@@ -44,7 +43,7 @@ public class MenuBuscador extends VentanaMenu {
         JButton volver = new JButton("Volver");
         volver.setBounds(100, 130, 200, 30);
         volver.addActionListener(e -> {
-            new MenuPrincipal(menu, usuario).setVisible(true);
+            new MenuPrincipal(usuario).setVisible(true);
             dispose();
         });
         add(volver);

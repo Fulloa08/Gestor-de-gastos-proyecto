@@ -4,7 +4,6 @@ package Controlador;
 import Modelo.Gasto;
 import Modelo.Tarjeta;
 import Modelo.Usuario;
-import Vista.Menu;
 
 import java.util.List;
 import java.util.Scanner;
@@ -15,7 +14,7 @@ public class GestorApp {
     private GestorAnalisisFinanciero analisis;
     private GestorAhorro gestorAhorro;
     private GestorBuscador buscador;
-    private final Menu menu;
+
     private final Scanner scanner;
 
     public GestorApp(Usuario usuario) {
@@ -24,12 +23,7 @@ public class GestorApp {
         this.analisis = new GestorAnalisisFinanciero(gestorDatos);
         this.gestorAhorro = new GestorAhorro(gestorDatos);
         this.buscador = new GestorBuscador(gestorDatos);
-        this.menu = new Menu(this);
         this.scanner = new Scanner(System.in);
-    }
-
-    public void iniciar() {
-        menu.mostrarMenuPrincipal();
     }
 
     public void registrarGasto() {
@@ -98,15 +92,6 @@ public class GestorApp {
         }
     }
 
-    public void registrarTarjeta() {
-        System.out.print("Número de tarjeta: ");
-        String numero = scanner.nextLine();
-        System.out.print("Saldo inicial: $");
-        double saldo = Double.parseDouble(scanner.nextLine());
-        Tarjeta tarjeta = new Tarjeta(numero, saldo);
-        gestorDatos.guardarTarjeta(tarjeta);
-    }
-
     public void verSaldoTarjeta() {
         Tarjeta tarjeta = gestorDatos.getTarjeta();
         if (tarjeta != null) {
@@ -116,16 +101,4 @@ public class GestorApp {
         }
     }
 
-    public void recargarTarjeta() {
-        Tarjeta tarjeta = gestorDatos.getTarjeta();
-        if (tarjeta != null) {
-            System.out.print("Monto a recargar: $");
-            double monto = Double.parseDouble(scanner.nextLine());
-            tarjeta.recargar(monto);
-            gestorDatos.guardarTarjeta(tarjeta);
-            System.out.println("Tarjeta recargada.");
-        } else {
-            System.out.println("No hay tarjeta registrada.");
-        }
-    }
 }
