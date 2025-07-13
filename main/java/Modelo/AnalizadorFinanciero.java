@@ -12,5 +12,5 @@ public class AnalizadorFinanciero {
         }
         return total / gastos.size();
     }
-//corregid
+//corregido
 }
