@@ -13,5 +13,4 @@ public class AnalizadorFinanciero {
         return total / gastos.size();
     }
 
-    public Map<String,
 }

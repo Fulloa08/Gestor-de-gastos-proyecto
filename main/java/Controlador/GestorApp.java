@@ -81,7 +81,5 @@ public class GestorApp {
                     g.getCategoria(), g.getMonto(), g.getDetalle()));
         }
     }
-
-    
-
+    // corregido
 }
