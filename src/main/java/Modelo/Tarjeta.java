@@ -17,8 +17,5 @@ public class Tarjeta {
     public double getSaldo() {
         return saldo;
     }
-
-    public void recargar(double monto) {
-        this.saldo += monto;
-    }
+    // corregido
 }

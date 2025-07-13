@@ -49,24 +49,14 @@ public class GestorApp {
         System.out.println("Meta guardada correctamente.");
     }
 
-    public void verProgresoMeta() {
-        double meta = gestorAhorro.obtenerMetaActual();
-        double total = gestorDatos.obtenerTotalGastado();
 
-        System.out.println("\n--- Progreso de la Meta ---");
-        System.out.println("Meta mensual: $" + meta);
-        System.out.println("Total gastado: $" + total);
-        System.out.println("Monto restante: $" + (meta - total));
-    }
 
     public void calcularPromedio() {
         double promedio = analisis.calcularPromedio();
         System.out.println("Promedio de gastos: $" + promedio);
     }
 
-    public void verPorcentajeCategorias() {
-        analisis.mostrarPorcentajes();
-    }
+
 
     public void buscarPorCategoria() {
         System.out.print("Ingrese categoría (Estudios, Alimentación, Transporte, Ocio, Varios): ");
@@ -91,14 +81,5 @@ public class GestorApp {
                     g.getCategoria(), g.getMonto(), g.getDetalle()));
         }
     }
-
-    public void verSaldoTarjeta() {
-        Tarjeta tarjeta = gestorDatos.getTarjeta();
-        if (tarjeta != null) {
-            System.out.println("Saldo actual: $" + tarjeta.getSaldo());
-        } else {
-            System.out.println("No hay tarjeta registrada.");
-        }
-    }
-
+    // corregid
 }
