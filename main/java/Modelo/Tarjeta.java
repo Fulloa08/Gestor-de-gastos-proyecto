@@ -17,5 +17,5 @@ public class Tarjeta {
     public double getSaldo() {
         return saldo;
     }
-    // corregido
+    // corregid
 }
